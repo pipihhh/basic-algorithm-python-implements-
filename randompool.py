@@ -29,6 +29,9 @@ class RandomPool(object):
             return self.__map[rand]
         raise KeyError("哈希表为空")
 
+    def __iter__(self):
+        return iter(self.__content.keys())
+
 
 a = RandomPool()
 for i in range(10):
@@ -36,6 +39,4 @@ for i in range(10):
 a.delete("5")
 a.delete("6")
 a.delete("7")
-print(a.get_random())
-print(a.get_random())
-print(a.get_random())
+list(a)

@@ -39,9 +39,8 @@ class SingleLinkList(object):
             self._length += 1
 
     def _create_if_head_not_exist(self, node):
-        if not self._head:
-            self._tail.next = node
-            self._tail = self._tail.next
+        if self._head is None:
+            self._tail = node
             self._head = node
             return True
         return False
@@ -63,19 +62,29 @@ class SingleLinkList(object):
     def left_pop(self):
         if self._head:
             tmp = self._head
-            val = tmp.val
             self._head = self._head.next
-            del tmp
+            val = tmp.val
             self._length -= 1
             return val
         raise LookupError("链表为空")
 
+    def _traversing(self):
+        tmp = self._head
+        while tmp:
+            yield tmp.val
+            tmp = tmp.next
 
-a = SingleLinkList()
-a.create_link_list_by_iter([1, 2, 3, 4, 5, 6])
-print(a.left_pop())
-a.left_push(1)
-a.left_push(1)
-a.left_push(1)
-print(a.left_pop())
-print(len(a))
+    def __iter__(self):
+        return self._traversing()
+
+
+if __name__ == '__main__':
+
+    a = SingleLinkList()
+    a.create_link_list_by_iter([1, 2, 3, 4, 5, 6])
+    print(a.left_pop(), "1")
+    a.left_push(1)
+    a.left_push(1)
+    a.left_push(1)
+    for i in a:
+        print(i)
