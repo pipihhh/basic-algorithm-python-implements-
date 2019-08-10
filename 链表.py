@@ -14,16 +14,19 @@ class SingleLinkList(object):
         self._length = 0
 
     def create_link_list_by_iter(self, iterable):
-        iterable = iter(iterable)
-        node = SingleNode(iterable.__next__())
-        self._length = 1
-        tmp = node
-        for i in iterable:
-            node.next = SingleNode(i)
-            node = node.next
-            self._length += 1
-        self._tail = node
-        self._head = tmp
+        if not self._head:
+            iterable = iter(iterable)
+            node = SingleNode(iterable.__next__())
+            self._length = 1
+            tmp = node
+            for i in iterable:
+                node.next = SingleNode(i)
+                node = node.next
+                self._length += 1
+            self._tail = node
+            self._head = tmp
+        else:
+            raise Exception("链表已经有节点了")
 
     def is_empty(self):
         return self._length == 0
@@ -77,14 +80,59 @@ class SingleLinkList(object):
     def __iter__(self):
         return self._traversing()
 
+    def reverse(self):
+        cur = self._head
+        tmp2 = self._head
+        pre = None
+        while cur:
+            tmp = cur.next
+            cur.next = pre
+            pre = cur
+            cur = tmp
+        self._head = pre
+        self._tail = tmp2
+
+    def __reversed__(self):
+        self.reverse()
+        return self
+
+    def sort(self):
+        self._sort(self._head, None)
+
+    def _sort(self, head, tail):
+        if head != tail:
+            pre = self._partition(head, tail)
+            self._sort(head, pre)
+            self._sort(pre.next, tail)
+
+    def _partition(self, head, tail):
+        if head == tail:
+            return head
+        slow = head.next
+        pre = head
+        val = head.val
+        while True:
+            while slow != tail and slow.val < val:
+                slow = slow.next
+                pre = pre.next
+            if slow == tail:
+                break
+            fast = slow.next
+            while fast != tail and fast.val > val:
+                fast = fast.next
+            if fast == tail:
+                break
+            slow.val, fast.val = fast.val, slow.val
+            pre = slow
+            slow = slow.next
+        head.val, pre.val = pre.val, head.val
+        return pre
+
 
 if __name__ == '__main__':
 
     a = SingleLinkList()
-    a.create_link_list_by_iter([1, 2, 3, 4, 5, 6])
-    print(a.left_pop(), "1")
-    a.left_push(1)
-    a.left_push(1)
-    a.left_push(1)
+    a.create_link_list_by_iter([1, 2, 4, 3, 5, 6])
+    a.sort()
     for i in a:
         print(i)
