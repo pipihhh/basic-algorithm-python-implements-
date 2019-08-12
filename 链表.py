@@ -128,11 +128,51 @@ class SingleLinkList(object):
         head.val, pre.val = pre.val, head.val
         return pre
 
+    def common_node_without_cycle(self, head: SingleNode) -> SingleNode:
+        """
+        找到两个链表的公共节点并返回那个节点。
+        此为无环链表的算法。
+        :param head: 另一个链表的表头
+        :return: 两链表的公共节点。
+        """
+        cur_head = self._head
+        other_head = head
+        n = 0
+        while cur_head:
+            n += 1
+            cur_head = cur_head.next
+        while other_head:
+            n -= 1
+            other_head = other_head.next
+        cur_head = head if n >= 0 else self._head
+        n = abs(n)
+        while n:
+            cur_head = cur_head.next
+            n -= 1
+        return cur_head
+
+    def is_cycle(self, head: SingleNode) -> bool:
+        """
+        判断此链表是否有环。快慢指针法
+        :param head: 链表的头结点
+        :return:
+        """
+        slow = head
+        fast = head
+        while slow and fast and fast.next:
+            if slow == fast:
+                return True
+            slow = slow.next
+            fast = fast.next.next
+        return False
+
 
 if __name__ == '__main__':
-
+    lst = list(range(100))
+    import random
+    random.shuffle(lst)
     a = SingleLinkList()
-    a.create_link_list_by_iter([1, 2, 4, 3, 5, 6])
+    a.create_link_list_by_iter(lst)
     a.sort()
     for i in a:
         print(i)

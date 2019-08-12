@@ -41,7 +41,7 @@ class DoublyLinkList(object):
             new_node.next = self._head
             self._head.prefix = new_node
             self._head = new_node
-        self._length = 1
+        self._length += 1
 
     def right_push(self, val):
         new_node = DoublyLinkNode(val)
@@ -52,13 +52,19 @@ class DoublyLinkList(object):
             new_node.prefix = self._tail
             self._tail.next = new_node
             self._tail = new_node
-        self._length = 1
+        self._length += 1
 
     def left_pop(self):
         if self.is_empty():
             raise Exception("链表为空")
+        self._length -= 1
         tmp = self._head
         self._head = self._head.next
+        if self._head is None:
+            self._tail = None
+            val = tmp.val
+            del tmp
+            return val
         self._head.prefix = None
         val = tmp.val
         del tmp
@@ -67,8 +73,14 @@ class DoublyLinkList(object):
     def right_pop(self):
         if self.is_empty():
             raise Exception("链表为空")
+        self._length -= 1
         tmp = self._tail
         self._tail = self._tail.prefix
+        if self._tail is None:
+            self._head = None
+            val = tmp.val
+            del tmp
+            return val
         self._tail.next = None
         val = tmp.val
         del tmp
@@ -92,11 +104,19 @@ class DoublyLinkList(object):
             yield tmp.val
             tmp = tmp.next
 
+    @property
+    def head(self):
+        return self._head.val if self._head else None
+
+    @property
+    def tail(self):
+        return self._tail.val if self._tail else None
+
 
 if __name__ == '__main__':
     link = DoublyLinkList()
-    link.create_link_list_by_iter([1, 2])
+    link.create_link_list_by_iter([1,])
     for l in link:
         print(l)
-    link.reverse()
+    link.right_pop()
     print(link)

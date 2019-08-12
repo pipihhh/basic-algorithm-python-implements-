@@ -38,11 +38,3 @@ class MyQueue(object):
             raise IndexError("队列为空，无法查看队首元素")
         return self.__content[self._start]
 
-
-queue = MyQueue(3)
-queue.push(1)
-queue.push(2)
-queue.push(3)
-print(queue.pop())
-print(queue.pop())
-print(queue.peek())

@@ -1,4 +1,4 @@
-import random, copy
+import random, copy, time
 
 
 def netherlands_flag(arr, start, end):
@@ -55,7 +55,11 @@ def test():
 
 
 # test()
-l = list(range(10000))
-l.reverse()
-quick_sort(l, 0, 9999)
+l = list(range(100000))
+random.shuffle(l)
+import time
+
+t = time.time()
+quick_sort(l, 0, 99999)
+print(time.time() - t)
 print(l)
