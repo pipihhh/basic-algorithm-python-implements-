@@ -222,11 +222,24 @@ class BinarySearchTree(object):
             _from = cur
             cur = tmp
 
+    def checkBST(self, root):
+        return self._checkItem(root, float("-inf"), float("inf"))
+        # write code here
+
+    def _checkItem(self, node, minval, maxval):
+        if node is None:
+            return True
+        if node.left is None and node.right is None:
+            return minval <= node.val <= maxval
+        ret = self._checkItem(node.left, minval, node.val)
+        ret2 = minval <= node.val <= maxval
+        ret3 = self._checkItem(node.right, node.val, maxval)
+        return ret and ret2 and ret3
+
 
 a = BinarySearchTree([5, 1, 2, 3, 6, 7, 8])
 print("============================")
 for i in a.mirrors_pos_traversing():
     print(i)
 print("============================")
-for i in a.pos_traversing():
-    print(i)
+print(a.checkBST(a._head))
